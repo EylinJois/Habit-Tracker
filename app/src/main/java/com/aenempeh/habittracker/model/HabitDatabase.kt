@@ -17,7 +17,7 @@ abstract class HabitDatabase: RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 HabitDatabase::class.java,
-                "newtododb").build()
+                "habitdb").build()
 
         operator fun invoke(context:Context) {
             if(instance != null) {
