@@ -56,6 +56,7 @@ class HabitListFragment : Fragment() {
         viewModel.loadHabits()
         observeViewModel()
 
+
     }
 
     override fun onResume() {

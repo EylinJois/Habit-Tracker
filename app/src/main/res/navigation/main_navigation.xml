@@ -22,10 +22,39 @@
         <action
             android:id="@+id/action_habitListFragment_to_habitCreateFragment"
             app:destination="@id/habitCreateFragment" />
+        <action
+            android:id="@+id/actionHabitEditFragment"
+            app:destination="@id/habitEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/habitCreateFragment"
         android:name="com.aenempeh.habittracker.view.HabitCreateFragment"
         android:label="fragment_habit_create"
         tools:layout="@layout/fragment_habit_create" />
+    <fragment
+        android:id="@+id/habitEditFragment"
+        android:name="com.aenempeh.habittracker.view.HabitEditFragment"
+        android:label="HabitEditFragment" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="desc"
+            app:argType="string" />
+        <argument
+            android:name="goal"
+            app:argType="integer" />
+        <argument
+            android:name="unit"
+            app:argType="string" />
+        <argument
+            android:name="icon"
+            app:argType="string" />
+        <argument
+            android:name="count"
+            app:argType="integer" />
+    </fragment>
 </navigation>

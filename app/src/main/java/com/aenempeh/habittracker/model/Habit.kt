@@ -7,17 +7,17 @@ import androidx.room.ColumnInfo
 @Entity
 data class Habit(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    var id: Int = 0,
     @ColumnInfo(name="name")
-    val name: String,
+    var name: String,
     @ColumnInfo(name="desc")
-    val description: String,
+    var description: String,
     @ColumnInfo(name="goal")
-    val goal: Int,
+    var goal: Int,
     @ColumnInfo(name="unit")
-    val unit: String,
+    var unit: String,
     @ColumnInfo(name="icon")
-    val icon: String,
+    var icon: String,
     @ColumnInfo(name="count")
     var currentCount: Int = 0
 ) {

@@ -3,6 +3,7 @@ package com.aenempeh.habittracker.view
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.aenempeh.habittracker.R
 import com.aenempeh.habittracker.databinding.HabitListItemBinding
@@ -10,8 +11,8 @@ import com.aenempeh.habittracker.model.Habit
 
 class HabitListAdapter(
     val habitList: ArrayList<Habit>,
-    val onIncrement: (String) -> Unit, // tombol +
-    val onDecrement: (String) -> Unit // tombol -
+    val onIncrement: (Int) -> Unit, // tombol +
+    val onDecrement: (Int) -> Unit // tombol -
 ) : RecyclerView.Adapter<HabitListAdapter.HabitViewHolder>() {
     class HabitViewHolder(val binding: HabitListItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -59,9 +60,22 @@ class HabitListAdapter(
             btnDecrement.setOnClickListener {
                 onDecrement(habit.id) // ini panggil fungsi onDecrement di fragmentnya klo klik
             }
+
+            txtHabitName.setOnClickListener {
+                val action =
+                    HabitListFragmentDirections
+                        .actionHabitEditFragment(
+                            habit.id,
+                            habit.name,
+                            habit.description,
+                            habit.goal,
+                            habit.unit,
+                            habit.icon,
+                            habit.currentCount
+                        )
+                Navigation.findNavController(root).navigate(action)
+            }
         }
-
-
     }
     override fun getItemCount() = habitList.size
 

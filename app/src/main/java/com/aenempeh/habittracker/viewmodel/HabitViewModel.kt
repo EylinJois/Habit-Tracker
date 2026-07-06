@@ -6,37 +6,59 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import com.aenempeh.habittracker.model.Habit
+import com.aenempeh.habittracker.model.HabitDatabase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class HabitViewModel(application: Application) : AndroidViewModel(application) {
+
+class HabitViewModel(application: Application) : AndroidViewModel(application), CoroutineScope {
 
     private val prefs = application.getSharedPreferences("habits_prefs", Context.MODE_PRIVATE)
     private val gson = Gson()
 
     val habitsLD = MutableLiveData<List<Habit>>()
 
+    private var job = Job()
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.IO
+
     fun createHabit(name: String, desc: String, goal: Int, unit: String, icon: String) {
         try {
             val newHabit = Habit(
-                id = System.currentTimeMillis().toString(),
                 name = name,
                 description = desc,
                 goal = goal,
                 unit = unit,
                 icon = icon)
 
-            val currentList = getHabits().toMutableList()
-            currentList.add(newHabit)
-
-            val json = gson.toJson(currentList)
-            prefs.edit().putString("habits_list", json).apply()
-            habitsLD.value = ArrayList(currentList)
-
-            Log.d("HabitViewModel", "Habit added successfully: $newHabit")
-
+            launch {
+                val db = HabitDatabase.buildDatabase(
+                    getApplication()
+                )
+                db.habitDao().insertAll(newHabit)
+            }
         } catch (e: Exception) {
             Log.e("HabitViewModel", "Failed to add habit", e)
+        }
+    }
+
+    fun updateHabit(habit: Habit) {
+        launch {
+            try {
+                val db = HabitDatabase.buildDatabase(
+                    getApplication()
+                )
+                db.habitDao().updateHabit(habit)
+                val updatedList = db.habitDao().selectAllHabit()
+                habitsLD.postValue(updatedList)
+            } catch (e: Exception) {
+                Log.e("HabitViewModel", "Update failed", e)
+            }
         }
     }
 
@@ -50,7 +72,7 @@ class HabitViewModel(application: Application) : AndroidViewModel(application) {
         habitsLD.value = ArrayList(getHabits())
     }
 
-    fun incrementProgress(habitId: String){
+    fun incrementProgress(habitId: Int){
         val list = getHabits().toMutableList()
         val h = list.find { it.id == habitId} ?: return
         if (h.currentCount < h.goal){
@@ -60,7 +82,7 @@ class HabitViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun decrementProgress(habitId: String) {
+    fun decrementProgress(habitId: Int) {
         val list = getHabits().toMutableList()
         val h = list.find { it.id == habitId } ?: return
         if (h.currentCount > 0) {
