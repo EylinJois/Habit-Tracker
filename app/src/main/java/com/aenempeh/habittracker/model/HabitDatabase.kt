@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(Habit::class), version =  1)
+@Database(entities = arrayOf(Habit::class, User::class), version = 2)
 abstract class HabitDatabase: RoomDatabase() {
     abstract fun habitDao(): HabitDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile private var instance: HabitDatabase ?= null
@@ -17,10 +18,12 @@ abstract class HabitDatabase: RoomDatabase() {
             Room.databaseBuilder(
                 context.applicationContext,
                 HabitDatabase::class.java,
-                "habitdb").build()
+                "habitdb")
+                .fallbackToDestructiveMigration()
+                .build()
 
         operator fun invoke(context:Context) {
-            if(instance != null) {
+            if(instance == null) {
                 synchronized(LOCK) {
                     instance ?: buildDatabase(context).also {
                         instance = it

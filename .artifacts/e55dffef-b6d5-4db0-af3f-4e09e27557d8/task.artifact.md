@@ -1,0 +1,4 @@
+- [ ] Resolve conflicts in `HabitViewModel.kt`
+- [ ] Resolve conflicts in `main_navigation.xml`
+- [ ] Add resolved files and continue rebase
+- [ ] Verify build and functionality

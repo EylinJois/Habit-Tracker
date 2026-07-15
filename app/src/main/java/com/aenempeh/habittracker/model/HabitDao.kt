@@ -18,8 +18,8 @@ interface HabitDao {
     @Query("SELECT * FROM habit")
     fun selectAllHabit(): List<Habit>
 
-    @Query("SELECT * FROM habit WHERE id= :id")
-    fun selectHabit(id:Int): Habit
+    @Query("SELECT * FROM habit WHERE id = :id")
+    fun selectHabit(id: Int): Habit
 
     @Delete
     fun deleteHabit(habit:Habit)

@@ -36,8 +36,8 @@ class HabitListFragment : Fragment() {
 
         adapter = HabitListAdapter(
             arrayListOf(),
-            onIncrement = { id -> viewModel.incrementProgress(id) },
-            onDecrement = { id -> viewModel.decrementProgress(id) }
+            onIncrement = { habit -> viewModel.incrementProgress(habit) },
+            onDecrement = { habit -> viewModel.decrementProgress(habit) }
         )
 
         binding.recViewHabits.layoutManager = LinearLayoutManager(context)

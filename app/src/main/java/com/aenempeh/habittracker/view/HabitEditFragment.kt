@@ -28,7 +28,7 @@ class HabitEditFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.fragment_habit_create,
+            R.layout.fragment_habit_edit,
             container,
             false
         )

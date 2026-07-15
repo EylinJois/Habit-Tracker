@@ -11,8 +11,8 @@ import com.aenempeh.habittracker.model.Habit
 
 class HabitListAdapter(
     val habitList: ArrayList<Habit>,
-    val onIncrement: (Int) -> Unit, // tombol +
-    val onDecrement: (Int) -> Unit // tombol -
+    val onIncrement: (Habit) -> Unit, // tombol +
+    val onDecrement: (Habit) -> Unit // tombol -
 ) : RecyclerView.Adapter<HabitListAdapter.HabitViewHolder>() {
     class HabitViewHolder(val binding: HabitListItemBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -55,10 +55,10 @@ class HabitListAdapter(
             btnIncrement.isEnabled = !habit.isCompleted() // button naik baru nyala klo misal habitnya blm complete
             btnDecrement.isEnabled = habit.currentCount > 0 // button turun baru nyala klo misal habitnya ada isinya
             btnIncrement.setOnClickListener {
-                onIncrement(habit.id) // ini panggil fungsi onIncrement di fragmentnya klo klik
+                onIncrement(habit) // ini panggil fungsi onIncrement di fragmentnya klo klik
             }
             btnDecrement.setOnClickListener {
-                onDecrement(habit.id) // ini panggil fungsi onDecrement di fragmentnya klo klik
+                onDecrement(habit) // ini panggil fungsi onDecrement di fragmentnya klo klik
             }
 
             txtHabitName.setOnClickListener {
